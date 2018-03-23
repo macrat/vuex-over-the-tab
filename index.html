@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<script src="https://unpkg.com/vue" defer></script>
+		<script src="https://unpkg.com/vuex" defer></script>
+
+		<script src="worker-client.js" defer></script>
+		<script src="local-storage-client.js" defer></script>
+		<script src="app.js" defer></script>
+
+		<title>Vuex over the tab</title>
+
+		<style>
+			main {
+				position: fixed;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+			}
+			input[type=range] {
+				-webkit-appearance: none;
+				-moz-appearance: none;
+				appearance: none;
+				display: block;
+				margin: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main :style="{ 'background-color': `rgb(${$store.state.red}, ${$store.state.green}, ${$store.state.blue})`}">
+			<h1 style="padding: 10px">Vuex over the tab</h1>
+
+			<section style="display: inline-block; border: 1px solid black; margin: 10px">
+				<input type=range max=255 :style="{background: `linear-gradient(90deg, rgb(0, ${$store.state.green}, ${$store.state.blue}), rgb(255, ${$store.state.green}, ${$store.state.blue}))`}" v-model=red>
+				<input type=range max=255 :style="{background: `linear-gradient(90deg, rgb(${$store.state.red}, 0, ${$store.state.blue}), rgb(${$store.state.red}, 255, ${$store.state.blue}))`}" v-model=green>
+				<input type=range max=255 :style="{background: `linear-gradient(90deg, rgb(${$store.state.red}, ${$store.state.green}, 0), rgb(${$store.state.red}, ${$store.state.green}, 255))`}" v-model=blue>
+			</section>
+
+			<section>
+				<div
+					v-for="x in $store.state.log.slice(-100).reverse()"
+					:style="{ 'background-color': `rgb(${x.red}, ${x.green}, ${x.blue})`}">
+
+					{{ x.idx }}:
+					{{ ('0' + x.date.getHours()).slice(-2) }}:{{ ('0' + x.date.getMinutes()).slice(-2) }}.{{ ('0' + x.date.getSeconds()).slice(-2) }}:
+					{{ x.target }}: {{ ('&nbsp;&nbsp;' + x[x.target]).slice(-3) }}
+				</div>
+			</section>
+		</main>
+	</body>
+</html>
