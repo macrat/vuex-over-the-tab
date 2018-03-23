@@ -52,3 +52,8 @@ const vm = new Vue({
 		},
 	},
 });
+
+
+if (window.name !== 'vuex-over-the-tab--subwindow') {
+	window.open(location.href, 'vuex-over-the-tab--subwindow');
+}
